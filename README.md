@@ -1,10 +1,10 @@
 # Example-Repository
 
-ef packages:
-microsoft.entityframeworkcore
-microsoft.entityframeworkcore.Abstractions
-microsoft.entityframeworkcore.Analyzers
-microsoft.entityframeworkcore.Proxies
-microsoft.entityframeworkcore.Relational
-microsoft.entityframeworkcore.SqlServer
+ef packages:<br/>
+microsoft.entityframeworkcore<br/>
+microsoft.entityframeworkcore.Abstractions<br/>
+microsoft.entityframeworkcore.Analyzers<br/>
+microsoft.entityframeworkcore.Proxies<br/>
+microsoft.entityframeworkcore.Relational<br/>
+microsoft.entityframeworkcore.SqlServer<br/>
 microsoft.entityframeworkcore.Tools
