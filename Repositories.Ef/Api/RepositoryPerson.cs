@@ -3,11 +3,6 @@ using Datasource.Ef.Domain.Content;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Ef.Repositories;
 using Repositories.Ef.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repositories.Ef.Api
 {
@@ -19,6 +14,12 @@ namespace Repositories.Ef.Api
         {
             return Context.Persons
                 .CountAsync(p => p.Death == null && p.Birth != null && p.Birth.Value.Year > DateTime.Now.Year - 120);
+        }
+
+        public Task<int> DeathTotalAsync()
+        {
+            return Context.Persons
+                .CountAsync(p => p.Birth != null && p.Death != null);
         }
     }
 }
