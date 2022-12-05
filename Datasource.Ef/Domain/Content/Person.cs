@@ -1,4 +1,4 @@
-﻿namespace Datasource.Ef.Domain.Content
+﻿namespace Ef.Datasource.Domain.Content
 {
     public class Person
     {

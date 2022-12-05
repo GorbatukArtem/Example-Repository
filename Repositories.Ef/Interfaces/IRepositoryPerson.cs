@@ -1,7 +1,7 @@
-﻿using Datasource.Ef.Domain.Content;
-using Persistence.Ef.Repositories;
+﻿using Ef.Datasource.Domain.Content;
+using Ef.Persistence.Repositories;
 
-namespace Repositories.Ef.Interfaces
+namespace Ef.Repositories.Interfaces
 {
     public interface IRepositoryPerson : IRepository<Person, int>
     {

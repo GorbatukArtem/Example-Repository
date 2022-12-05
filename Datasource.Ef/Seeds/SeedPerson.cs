@@ -1,8 +1,8 @@
-﻿using Datasource.Ef.Domain.Content;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using Ef.Datasource.Domain.Content;
 
-namespace Datasource.Ef.Seeds
+namespace Ef.Datasource.Seeds
 {
     internal class SeedPerson : IEntityTypeConfiguration<Person>
     {

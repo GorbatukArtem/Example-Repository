@@ -1,4 +1,4 @@
-﻿namespace Persistence.Ef.Repositories
+﻿namespace Ef.Persistence.Repositories
 {
     public interface IRepository<TEntity, in TKey> where TEntity : class
     {

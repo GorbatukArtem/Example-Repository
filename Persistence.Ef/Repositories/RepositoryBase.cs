@@ -1,6 +1,7 @@
-﻿using Datasource.Ef.Contexts;
+﻿using Ef.Datasource.Contexts;
+using Microsoft.EntityFrameworkCore;
 
-namespace Persistence.Ef.Repositories
+namespace Ef.Persistence.Repositories
 {
     public abstract class RepositoryBase<TEntity, TKey> : IRepository<TEntity, TKey> where TEntity : class
     {

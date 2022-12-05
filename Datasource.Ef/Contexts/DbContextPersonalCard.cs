@@ -1,9 +1,9 @@
-﻿using Datasource.Ef.Configurations.Content;
-using Datasource.Ef.Domain.Content;
-using Datasource.Ef.Seeds;
+﻿using Ef.Datasource.Configurations.Content;
+using Ef.Datasource.Domain.Content;
+using Ef.Datasource.Seeds;
 using Microsoft.EntityFrameworkCore;
 
-namespace Datasource.Ef.Contexts
+namespace Ef.Datasource.Contexts
 {
     public class DbContextPersonalCard : DbContext
     {

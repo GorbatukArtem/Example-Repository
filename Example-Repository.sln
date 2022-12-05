@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Datasource.Ef", "Datasource.Ef\Datasource.Ef.csproj", "{FFB7B44E-0C46-47DD-9E2B-5A036746F539}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ef.Datasource", "Datasource.Ef\Ef.Datasource.csproj", "{FFB7B44E-0C46-47DD-9E2B-5A036746F539}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence.Ef", "Persistence.Ef\Persistence.Ef.csproj", "{884D579D-32C6-45BF-802D-5361802E5317}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ef.Persistence", "Persistence.Ef\Ef.Persistence.csproj", "{884D579D-32C6-45BF-802D-5361802E5317}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repositories.Ef", "Repositories.Ef\Repositories.Ef.csproj", "{211D45A7-8789-472D-B76C-799568D3C4F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ef.Repositories", "Repositories.Ef\Ef.Repositories.csproj", "{211D45A7-8789-472D-B76C-799568D3C4F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.Content", "Services.Content\Services.Content.csproj", "{E08FF4CE-6BEA-487D-AB3B-B947C34E30F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.Content", "Services.Content\Services.Content.csproj", "{E08FF4CE-6BEA-487D-AB3B-B947C34E30F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
