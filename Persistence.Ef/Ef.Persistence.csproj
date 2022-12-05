@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Persistence.Ef\Persistence.Ef.csproj" />
+    <ProjectReference Include="..\Datasource.Ef\Ef.Datasource.csproj" />
   </ItemGroup>
 
 </Project>

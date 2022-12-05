@@ -1,10 +1,10 @@
-﻿using Datasource.Ef.Contexts;
-using Datasource.Ef.Domain.Content;
+﻿using Ef.Datasource.Contexts;
+using Ef.Datasource.Domain.Content;
+using Ef.Persistence.Repositories;
+using Ef.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Persistence.Ef.Repositories;
-using Repositories.Ef.Interfaces;
 
-namespace Repositories.Ef.Api
+namespace Ef.Repositories.Api
 {
     public class RepositoryPerson : RepositoryBase<Person, int>, IRepositoryPerson
     {
