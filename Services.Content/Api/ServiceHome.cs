@@ -1,4 +1,4 @@
-﻿using Ef.Repositories.Interfaces;
+﻿using Core.Interfaces.Content;
 using Services.Content.Domain;
 using Services.Content.Interfaces;
 
