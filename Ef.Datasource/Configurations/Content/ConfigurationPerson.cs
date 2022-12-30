@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using Ef.Datasource.Domain.Content;
+using Core.Domain.Content;
 
 namespace Ef.Datasource.Configurations.Content
 {

@@ -6,9 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Core\Core.csproj" />
-    <ProjectReference Include="..\Ef.Datasource\Ef.Datasource.csproj" />
-  </ItemGroup>
-
 </Project>

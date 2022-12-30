@@ -1,7 +1,5 @@
-﻿using Ef.Datasource.Configurations.Content;
-using Ef.Datasource.Domain.Content;
-using Ef.Datasource.Seeds;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace Ef.Datasource.Contexts
 {
@@ -10,8 +8,10 @@ namespace Ef.Datasource.Contexts
         public DbContextPersonalCard() { }
         public DbContextPersonalCard(DbContextOptions<DbContextPersonalCard> options) : base(options) { }
 
-        public virtual DbSet<Person> Persons { get; set; }
-
+        public new DbSet<TEntity> Set<TEntity>() where TEntity : class
+        {
+            return base.Set<TEntity>();
+        }
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
             options.UseLazyLoadingProxies(false);
@@ -26,13 +26,25 @@ namespace Ef.Datasource.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //#region Configurations
-            modelBuilder.ApplyConfiguration(new ConfigurationPerson());
-            //#endregion
+            var entityTypeConfigurations = Assembly
+                .GetExecutingAssembly()
+                .GetTypes()
+                .Where(type => !string.IsNullOrEmpty(type.Namespace))
+                .Where(type => type.BaseType != null && 
+                    type.BaseType.IsGenericType && 
+                    type.BaseType.GetGenericTypeDefinition() == typeof(IEntityTypeConfiguration<>));
+            
+            foreach (var configuration in entityTypeConfigurations)
+            {
+                dynamic? instance = Activator.CreateInstance(configuration);
 
-            //#region Seeds
-            modelBuilder.ApplyConfiguration(new SeedPerson());
-            //#endregion
+                if (instance != null)
+                {
+                    modelBuilder.ApplyConfiguration(instance);
+                }
+            }
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
