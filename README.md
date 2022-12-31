@@ -20,42 +20,30 @@ Eric Evans в книге **Domain-Driven Design Tackling Complexity in the Heart
 
 ```C#
 В паттерне DAO вы увидете методы
-Task<int> AliveTotalAsync();
-Task<int> DeathTotalAsync();
+Task<int> FindAliveTotalAsync();
+Task<int> FindDeathTotalAsync();
 ```
 ```C#
 В паттерне Repository вы увидете метод        
-Task<int> TotalAsync(TotalSpecification specification);
+Task<int> FindTotalAsync(FindTotalSpecification specification);
 
-реализация TotalSpecification будет выгялядеть примерно следующим образом
+реализация FindTotalSpecification будет выгялядеть примерно следующим образом
 
-public interface TotalSpecification { 
-    boolean Specified(People people);     
+public interface FindTotalSpecification { 
+    Task<int> Specified();     
 }
 
-public class PeopleSpecificationTotalAlive : TotalSpecification {
-    private Type type; 
-    public PeopleSpecificationTotalAlive(Type type) {
-      this.type = type
-    }    
-    public boolean specified(People people) {
-      /// реализация
-    } 
-    public Criterion ToCriteria() {
-      /// реализация
+public class FindAliveTotalSpecification : FindTotalSpecification {
+    public Task<int> Specified() {
+            return Context.Set<Person>()
+                .CountAsync(p => p.Death == null && p.Birth != null && p.Birth.Value.Year + 120 > DateTime.Now.Year);
     } 
 }
 
-public class PeopleSpecificationTotalDeath : TotalSpecification {
-    private Type type; 
-    public PeopleSpecificationTotalAlive(Type type) {
-      this.type = type
-    }    
-    public boolean specified(People people) {
-      /// реализация
-    } 
-    public Criterion ToCriteria() {
-      /// реализация
+public class FindDeathTotalSpecification : FindTotalSpecification {
+    public Task<int> Specified() {
+            return Context.Set<Person>()
+                .CountAsync(p => p.Death != null || (p.Birth != null && p.Birth.Value.Year + 120 < DateTime.Now.Year));
     } 
 }
 ```
