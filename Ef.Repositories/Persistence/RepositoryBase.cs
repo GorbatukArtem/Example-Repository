@@ -41,16 +41,28 @@ namespace Ef.Repositories.Persistence
             Context.Set<TEntity>().Remove(entity);
         }
 
-        public virtual IQueryable<TEntity> GetAll()
+        public virtual async Task<IEnumerable<TEntity>> GetAll(CancellationToken token = default)
         {
-            return Context.Set<TEntity>().AsNoTracking();
+            return await Context.Set<TEntity>().AsNoTracking().ToListAsync(token);
         }
 
-        public virtual TEntity? GetById(params TKey[] ids)
+        public virtual async Task<TEntity?> GetById(CancellationToken token = default, params TKey[] ids)
         {
             ArgumentNullException.ThrowIfNull(nameof(ids));
 
-            return Context.Set<TEntity>().Find(new object?[] { ids });
+            return await Context.Set<TEntity>().FindAsync(new object?[] { ids }, token);
+        }
+
+        /// <summary>
+        /// EF DbContext поступает через конструктор через внедрение зависимостей.
+        /// Он совместно используется несколькими репозиториями в одной и той же области HTTP-запроса
+        /// благодаря его времени жизни по умолчанию - ServiceLifetime.Scoped в контейнере IoC
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public Task<int> SaveChangesAsync(CancellationToken token = default)
+        {
+            return Context.SaveChangesAsync(token);
         }
     }
 }
