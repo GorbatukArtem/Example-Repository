@@ -14,13 +14,13 @@ namespace Services.Content.Api
             this.repositoryPerson = repositoryPerson;
         }
 
-        public Task<HomeResult> GetAsync()
+        public Task<HomeResult> GetAsync(CancellationToken token = default)
         {
-            var personsTotal = repositoryPerson.GetAll().CountAsync();
+            var personsTotal = repositoryPerson.TotalAsync(token);
 
-            var aliveTotal = repositoryPerson.AliveTotalAsync();
+            var aliveTotal = repositoryPerson.AliveTotalAsync(token);
 
-            var deadTotal = repositoryPerson.DeathTotalAsync();
+            var deadTotal = repositoryPerson.DeathTotalAsync(token);
 
             Task.WaitAll(personsTotal, aliveTotal, deadTotal);
 

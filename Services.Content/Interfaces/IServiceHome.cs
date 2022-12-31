@@ -4,6 +4,6 @@ namespace Services.Content.Interfaces
 {
     public interface IServiceHome
     {
-        Task<HomeResult> GetAsync();
+        Task<HomeResult> GetAsync(CancellationToken token = default);
     }
 }
