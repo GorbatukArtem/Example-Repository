@@ -13,7 +13,7 @@ namespace Ef.Repositories.Persistence
             Context = context;
         }
 
-        public TEntity Create(TEntity entity)
+        public virtual TEntity Create(TEntity entity)
         {
             ArgumentNullException.ThrowIfNull(entity);
 
@@ -22,7 +22,7 @@ namespace Ef.Repositories.Persistence
             return entity;
         }
 
-        public void Update(TEntity entity)
+        public virtual void Update(TEntity entity)
         {
             ArgumentNullException.ThrowIfNull(entity);
 
@@ -32,7 +32,7 @@ namespace Ef.Repositories.Persistence
             Context.Set<TEntity>().Update(entity);
         }
 
-        public void Delete(TKey id)
+        public virtual void Delete(TKey id)
         {
             var entity = Context.Set<TEntity>().Find(id);
 
@@ -41,21 +41,16 @@ namespace Ef.Repositories.Persistence
             Context.Set<TEntity>().Remove(entity);
         }
 
-        public ValueTask<TEntity?> GetAsync(TKey id, CancellationToken token = default)
-        {
-            ArgumentNullException.ThrowIfNull(nameof(id));
-
-            return Context.Set<TEntity>().FindAsync(new object?[] { new TKey?[] { id }, token }, token);
-        }
-
-        public IQueryable<TEntity> GetAsync(CancellationToken token = default)
+        public virtual IQueryable<TEntity> GetAll()
         {
             return Context.Set<TEntity>().AsNoTracking();
         }
 
-        public Task<int> CountAsync(CancellationToken token = default)
+        public virtual TEntity? GetById(params TKey[] ids)
         {
-            return Context.Set<TEntity>().CountAsync(token);
+            ArgumentNullException.ThrowIfNull(nameof(ids));
+
+            return Context.Set<TEntity>().Find(new object?[] { ids });
         }
     }
 }
