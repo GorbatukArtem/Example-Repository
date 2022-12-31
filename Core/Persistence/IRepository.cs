@@ -6,7 +6,9 @@
         void Update(TEntity entity);
         void Delete(TKey id);
 
-        IQueryable<TEntity> GetAll();
-        TEntity? GetById(params TKey[] ids);
+        Task<IEnumerable<TEntity>> GetAll(CancellationToken token = default);
+        Task<TEntity?> GetById(CancellationToken token = default, params TKey[] ids);
+
+        Task<int> SaveChangesAsync(CancellationToken token = default);
     }
 }
