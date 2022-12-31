@@ -25,23 +25,27 @@ Task<int> FindDeathTotalAsync();
 ```
 ```C#
 В паттерне Repository вы увидете метод        
-Task<int> FindTotalAsync(FindTotalSpecification specification);
+Task<int> FindTotalAsync(FindTotalSpecification specification){
+    Task<int> = specification.Execute();
+}
 
 реализация FindTotalSpecification будет выгялядеть примерно следующим образом
 
 public interface FindTotalSpecification { 
-    Task<int> Specified();     
+    здесь могут быть поля по которым может происходить фильтрация. 
+    в данном пример этого нет.
+    Task<int> Execute();     
 }
 
 public class FindAliveTotalSpecification : FindTotalSpecification {
-    public Task<int> Specified() {
+    public Task<int> Execute() {
             return Context.Set<Person>()
                 .CountAsync(p => p.Death == null && p.Birth != null && p.Birth.Value.Year + 120 > DateTime.Now.Year);
     } 
 }
 
 public class FindDeathTotalSpecification : FindTotalSpecification {
-    public Task<int> Specified() {
+    public Task<int> Execute() {
             return Context.Set<Person>()
                 .CountAsync(p => p.Death != null || (p.Birth != null && p.Birth.Value.Year + 120 < DateTime.Now.Year));
     } 
@@ -51,7 +55,12 @@ public class FindDeathTotalSpecification : FindTotalSpecification {
 **Вот то, как обычно заканчиваются рассуждения об DAO pattern vs Repository pattern.**
 >Паттерн DAO предоставляет размытое описание контракта. Используя его, выполучаете потенциально неверно используемые и раздутые реализации классов. Паттерн Репозиторий использует метафору коллекции, которая дает нам жесткий контракт и делает понимание вашего кода проще.
 
-**Я изучив предлагаемое сообществом пришел к выводу**
+**Вот например мнение автора Marcin Chwedczuk в целом о проблемах этих паттернов** http://blog.marcinchwedczuk.pl/repository-pattern-my-way
++ Нарушение Принципа Сегрегации Интерфейсов (Interface Segregation Principle). Они выражают полный набор CRUD-операций даже для тех сущностей, для которых операции удаления не имеют никакого смысла. Например, когда вы деактивируете пользователей вместо удаления их записей из базы данных.
++ Имплементация IRepository почти всегда регистрируется в IoC-контейнере и может быть внедрена в ваши сервисы точно так же, как и любая другая зависимость.
++ Возвращение IQueryable<TEntity> в методе GetAll() репозитория плохая идея. Вот здесь в статье на сайте microsoft есть поддтверждение его слов https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/infrastructure-persistence-layer-implementation-entity-framework-core Although we don't recommend returning IQueryable from a repository, it's perfectly fine to use them within the repository to build up a set of results. You can see this approach used in the List method above, which uses intermediate IQueryable expressions to build up the query's list of includes before executing the query with the specification's criteria on the last line.
+
+**Изучив предлагаемое сообществом пришел к выводу**
 >В данном вопросе каждый имеет свое мнение о разнице между этими двумя паттернами.</br>
 Вот один из многих примеров : https://ducmanhphan.github.io/2019-04-28-Repository-pattern/
 
