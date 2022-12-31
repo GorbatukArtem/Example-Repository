@@ -5,7 +5,8 @@ namespace Core.Interfaces.Content
 {
     public interface IRepositoryPerson : IRepository<Person, int>
     {
-        Task<int> AliveTotalAsync();
-        Task<int> DeathTotalAsync();
+        Task<int> TotalAsync(CancellationToken token = default);
+        Task<int> AliveTotalAsync(CancellationToken token = default);
+        Task<int> DeathTotalAsync(CancellationToken token = default);
     }
 }
