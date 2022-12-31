@@ -1,4 +1,5 @@
 ﻿using Core.Interfaces.Content;
+using Microsoft.EntityFrameworkCore;
 using Services.Content.Domain;
 using Services.Content.Interfaces;
 
@@ -15,7 +16,7 @@ namespace Services.Content.Api
 
         public Task<HomeResult> GetAsync()
         {
-            var personsTotal = repositoryPerson.CountAsync();
+            var personsTotal = repositoryPerson.GetAll().CountAsync();
 
             var aliveTotal = repositoryPerson.AliveTotalAsync();
 
