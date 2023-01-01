@@ -1,12 +1,12 @@
-﻿using Core.Domain.Content;
-using Core.Interfaces.Content;
+﻿using Core.Domain;
+using Core.Interfaces;
 using Ef.Datasource.Contexts;
 using Ef.Repositories.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ef.Repositories.Api
 {
-    public class RepositoryPerson : RepositoryBase<Person, int>, IRepositoryPerson
+    public class RepositoryPerson : RepositoryBase<Person, int?>, IRepositoryPerson
     {
         public RepositoryPerson(DbContextPersonalCard context) : base(context) { }
 

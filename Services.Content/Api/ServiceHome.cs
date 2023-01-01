@@ -1,5 +1,4 @@
-﻿using Core.Interfaces.Content;
-using Microsoft.EntityFrameworkCore;
+﻿using Core.Interfaces;
 using Services.Content.Domain;
 using Services.Content.Interfaces;
 
@@ -22,7 +21,7 @@ namespace Services.Content.Api
 
             var deadTotal = repositoryPerson.DeathTotalAsync(token);
 
-            Task.WaitAll(personsTotal, aliveTotal, deadTotal);
+            Task.WaitAll(new Task[] { personsTotal, aliveTotal, deadTotal }, token);
 
             return Task.FromResult(new HomeResult()
             {

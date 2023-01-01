@@ -12,6 +12,7 @@ namespace Ef.Datasource.Contexts
         {
             return base.Set<TEntity>();
         }
+
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
             options.UseLazyLoadingProxies(false);

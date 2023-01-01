@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using Core.Domain.Content;
+using Core.Domain;
 
-namespace Ef.Datasource.Configurations.Content
+namespace Ef.Datasource.Configurations
 {
     internal class ConfigurationPerson : IEntityTypeConfiguration<Person>
     {
