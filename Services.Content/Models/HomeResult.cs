@@ -1,9 +1,8 @@
-﻿namespace Services.Content.Domain
+﻿namespace Services.Content.Domain;
+
+public class HomeResult
 {
-    public class HomeResult
-    {
-        public int PersonsTotal { get; set; }
-        public int AliveTotal { get; set; }
-        public int DeadTotal { get; set; }
-    }
+    public int PersonsTotal { get; set; }
+    public int AliveTotal { get; set; }
+    public int DeadTotal { get; set; }
 }
