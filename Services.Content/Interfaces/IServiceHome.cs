@@ -1,9 +1,8 @@
 ﻿using Services.Content.Domain;
 
-namespace Services.Content.Interfaces
+namespace Services.Content.Interfaces;
+
+public interface IServiceHome
 {
-    public interface IServiceHome
-    {
-        Task<HomeResult> GetAsync(CancellationToken token = default);
-    }
+    Task<HomeResult> GetAsync(CancellationToken token = default);
 }

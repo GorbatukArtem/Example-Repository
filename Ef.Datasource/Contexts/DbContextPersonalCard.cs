@@ -1,51 +1,50 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
-namespace Ef.Datasource.Contexts
+namespace Ef.Datasource.Contexts;
+
+public class DbContextPersonalCard : DbContext
 {
-    public class DbContextPersonalCard : DbContext
+    public DbContextPersonalCard() { }
+    public DbContextPersonalCard(DbContextOptions<DbContextPersonalCard> options) : base(options) { }
+
+    public new DbSet<TEntity> Set<TEntity>() where TEntity : class
     {
-        public DbContextPersonalCard() { }
-        public DbContextPersonalCard(DbContextOptions<DbContextPersonalCard> options) : base(options) { }
+        return base.Set<TEntity>();
+    }
 
-        public new DbSet<TEntity> Set<TEntity>() where TEntity : class
+    protected override void OnConfiguring(DbContextOptionsBuilder options)
+    {
+        options.UseLazyLoadingProxies(false);
+
+        // во время запуска тестов без этой проверки возникает ошибка 'Multiple database providers in service provider'  .
+        // InMemory создает свою конфигурацию.
+        if (!options.IsConfigured)
         {
-            return base.Set<TEntity>();
+            options.UseSqlServer("connection_string");
         }
+    }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        var entityTypeConfigurations = Assembly
+            .GetExecutingAssembly()
+            .GetTypes()
+            .Where(type => !string.IsNullOrEmpty(type.Namespace))
+            .Where(type => type.BaseType != null && 
+                type.BaseType.IsGenericType && 
+                type.BaseType.GetGenericTypeDefinition() == typeof(IEntityTypeConfiguration<>));
+        
+        foreach (var configuration in entityTypeConfigurations)
         {
-            options.UseLazyLoadingProxies(false);
+            dynamic? instance = Activator.CreateInstance(configuration);
 
-            // во время запуска тестов без этой проверки возникает ошибка 'Multiple database providers in service provider'  .
-            // InMemory создает свою конфигурацию.
-            if (!options.IsConfigured)
+            if (instance != null)
             {
-                options.UseSqlServer("connection_string");
+                modelBuilder.ApplyConfiguration(instance);
             }
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            var entityTypeConfigurations = Assembly
-                .GetExecutingAssembly()
-                .GetTypes()
-                .Where(type => !string.IsNullOrEmpty(type.Namespace))
-                .Where(type => type.BaseType != null && 
-                    type.BaseType.IsGenericType && 
-                    type.BaseType.GetGenericTypeDefinition() == typeof(IEntityTypeConfiguration<>));
-            
-            foreach (var configuration in entityTypeConfigurations)
-            {
-                dynamic? instance = Activator.CreateInstance(configuration);
-
-                if (instance != null)
-                {
-                    modelBuilder.ApplyConfiguration(instance);
-                }
-            }
-
-            base.OnModelCreating(modelBuilder);
-        }
+        base.OnModelCreating(modelBuilder);
     }
 }
