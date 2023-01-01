@@ -1,8 +1,7 @@
-﻿namespace Core.Domain.Content
+﻿namespace Services.Admin.Models
 {
-    public class Person
+    public class PersonCreate
     {
-        public int Id { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string? LastName { get; set; }
         public string? MiddleName { get; set; }

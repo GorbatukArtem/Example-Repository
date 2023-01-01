@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ef.Datasource", "Ef.Datasou
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ef.Repositories", "Ef.Repositories\Ef.Repositories.csproj", "{75E51975-E0D6-4B04-854F-A3ED16539A32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{4BD66A77-BFB1-429C-862D-F56A381A31A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{4BD66A77-BFB1-429C-862D-F56A381A31A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.Admin", "Services.Admin\Services.Admin.csproj", "{49B54936-EC2E-4E9F-BD0E-62B24F1B014E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{4BD66A77-BFB1-429C-862D-F56A381A31A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4BD66A77-BFB1-429C-862D-F56A381A31A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4BD66A77-BFB1-429C-862D-F56A381A31A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49B54936-EC2E-4E9F-BD0E-62B24F1B014E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49B54936-EC2E-4E9F-BD0E-62B24F1B014E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49B54936-EC2E-4E9F-BD0E-62B24F1B014E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49B54936-EC2E-4E9F-BD0E-62B24F1B014E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

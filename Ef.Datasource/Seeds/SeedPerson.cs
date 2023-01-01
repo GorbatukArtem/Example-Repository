@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using Core.Domain.Content;
+using Core.Domain;
 
 namespace Ef.Datasource.Seeds
 {

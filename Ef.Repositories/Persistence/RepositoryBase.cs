@@ -34,6 +34,8 @@ namespace Ef.Repositories.Persistence
 
         public virtual void Delete(TKey id)
         {
+            ArgumentNullException.ThrowIfNull(id);
+
             var entity = Context.Set<TEntity>().Find(id);
 
             ArgumentNullException.ThrowIfNull(entity);
