@@ -5,4 +5,5 @@ global using Microsoft.EntityFrameworkCore;
 global using Services.Admin.Api;
 global using Services.Admin.Models;
 global using Services.Content.Api;
+global using Tests.Persistence;
 global using Xunit;

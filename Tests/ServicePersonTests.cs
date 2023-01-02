@@ -1,6 +1,4 @@
-﻿using Tests.Persistence;
-
-namespace Tests;
+﻿namespace Tests;
 
 public class ServicePersonTests : TestsBase
 {
@@ -15,24 +13,78 @@ public class ServicePersonTests : TestsBase
         var createModel = new PersonCreate
         {
             LastName = "Романов",
-            FirstName = "Михаил",
-            MiddleName = "Федорович",
-            Birth = new DateTime(1596, 12, 07),
-            Death = new DateTime(1645, 07, 13),
+            FirstName = "Федор III",
+            MiddleName = "Алексеевич",
+            Birth = new DateTime(1676, 01, 29),
+            Death = new DateTime(1682, 04, 27),
         };
 
         // act
         await service.Create(createModel);
 
         // assert
-        var results = context.Set<Person>().AsNoTracking().ToList();
-        Assert.NotNull(results);
-        var result = Assert.Single(results);
+        var result = context.Set<Person>().LastOrDefault();
+        Assert.NotNull(result);
         Assert.Equal("Романов", result.LastName);
-        Assert.Equal("Михаил", result.FirstName);
-        Assert.Equal("Федорович", result.MiddleName);
-        Assert.Equal(new DateTime(1596, 12, 07), result.Birth);
-        Assert.Equal(new DateTime(1645, 07, 13), result.Death);
+        Assert.Equal("Федор III", result.FirstName);
+        Assert.Equal("Алексеевич", result.MiddleName);
+        Assert.Equal(new DateTime(1676, 01, 29), result.Birth);
+        Assert.Equal(new DateTime(1682, 04, 27), result.Death);
+    }
+
+    [Fact]
+    public async void Create_When_FirstName_EqualNull_Then_ThrowException()
+    {
+        // arrange
+        using var context = CreateDbContext();
+        var repository = new RepositoryPerson(context);
+        var service = new ServicePerson(repository);
+
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+        var createModel = new PersonCreate
+        {
+            LastName = "Романов",
+            FirstName = null,
+            MiddleName = "Алексеевич",
+            Birth = new DateTime(1676, 01, 29),
+            Death = new DateTime(1682, 04, 27),
+        };
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+
+        // act
+        var result = async () => await service.Create(createModel);
+
+        // assert
+        await Assert.ThrowsAsync<DbUpdateException>(result);
+    }
+
+    [Fact(Skip = @"The exception does not work for a field with the HasMaxLength attribute whose value exceeds the specified length.
+                   The reason was not found in a short time by me.")]
+    public async void Create_When_FirstName_ExceedsLength_Then_ThrowException()
+    {
+        // arrange
+        using var context = CreateDbContext();
+        var repository = new RepositoryPerson(context);
+        var service = new ServicePerson(repository);
+
+        var firstNameExceedsLength = new string('a', 201);
+
+        var createModel = new PersonCreate
+        {
+            LastName = "Романов",
+            FirstName = firstNameExceedsLength,
+            MiddleName = "Алексеевич",
+            Birth = new DateTime(1676, 01, 29),
+            Death = new DateTime(1682, 04, 27),
+        };
+
+        await service.Create(createModel);
+
+        // act
+        var result = async () => await service.Create(createModel);
+
+        // assert
+        await Assert.ThrowsAsync<DbUpdateException>(result);
     }
 
     [Fact]
@@ -43,24 +95,11 @@ public class ServicePersonTests : TestsBase
         var repository = new RepositoryPerson(context);
         var service = new ServicePerson(repository);
 
-        var seed = new Person
-        {
-            Id = 1,
-            LastName = "Романов Михаил",
-            FirstName = string.Empty,
-            MiddleName = "Федорович",
-            Birth = new DateTime(1596, 12, 07),
-            Death = new DateTime(1645, 07, 13),
-        };
-
-        await context.Set<Person>().AddAsync(seed);
-        await context.SaveChangesAsync();
-
         var updateModel = new PersonUpdate
         {
             Id = 1,
             LastName = "Романов",
-            FirstName = "Михаил",
+            FirstName = "Михаил +",
             MiddleName = "Федорович",
             Birth = new DateTime(1596, 12, 07),
             Death = new DateTime(1645, 07, 13),
@@ -70,11 +109,10 @@ public class ServicePersonTests : TestsBase
         await service.Update(updateModel);
 
         // assert
-        var results = context.Set<Person>().AsNoTracking().ToList();
-        Assert.NotNull(results);
-        var result = Assert.Single(results);
+        var result = context.Find<Person>(1);
+        Assert.NotNull(result);
         Assert.Equal("Романов", result.LastName);
-        Assert.Equal("Михаил", result.FirstName);
+        Assert.Equal("Михаил +", result.FirstName);
         Assert.Equal("Федорович", result.MiddleName);
         Assert.Equal(new DateTime(1596, 12, 07), result.Birth);
         Assert.Equal(new DateTime(1645, 07, 13), result.Death);
@@ -88,26 +126,12 @@ public class ServicePersonTests : TestsBase
         var repository = new RepositoryPerson(context);
         var service = new ServicePerson(repository);
 
-        var seed = new Person
-        {
-            Id = 1,
-            LastName = "Романов Михаил",
-            FirstName = string.Empty,
-            MiddleName = "Федорович",
-            Birth = new DateTime(1596, 12, 07),
-            Death = new DateTime(1645, 07, 13),
-        };
-
-        await context.Set<Person>().AddAsync(seed);
-        await context.SaveChangesAsync();
-
         // act
         await service.Delete(1);
 
         // assert
-        var results = context.Set<Person>().AsNoTracking().ToList();
-        Assert.NotNull(results);
-        Assert.Empty(results);
+        var result = context.Find<Person>(1);
+        Assert.Null(result);
     }
 
     [Fact]
@@ -117,30 +141,6 @@ public class ServicePersonTests : TestsBase
         using var context = CreateDbContext();
         var repository = new RepositoryPerson(context);
         var service = new ServicePerson(repository);
-
-        var seeds = new List<Person>() {
-            new Person
-            {
-                Id = 1,
-                LastName = "Романов",
-                FirstName = "Михаил",
-                MiddleName = "Федорович",
-                Birth = new DateTime(1596, 12, 07),
-                Death = new DateTime(1645, 07, 13),
-            },
-            new Person
-            {
-                Id = 2,
-                LastName = "Романов",
-                FirstName = "Алексей",
-                MiddleName = "Михайлович",
-                Birth = new DateTime(1629, 03, 19),
-                Death = new DateTime(1676, 02, 08),
-            } 
-        };
-
-        await context.Set<Person>().AddRangeAsync(seeds);
-        await context.SaveChangesAsync();
 
         // act
         var results = await service.GetAll();

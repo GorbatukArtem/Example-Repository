@@ -26,57 +26,25 @@ public abstract class RepositoryBase<TEntity, TKey> : IRepository<TEntity, TKey>
     {
         ArgumentNullException.ThrowIfNull(entity);
 
-        // solution related to disconnected id
-
-        var keyValues = Context.Model
-            .FindEntityType(typeof(TEntity))?
-            .FindPrimaryKey()?
-            .Properties
-            .Select(p => typeof(TEntity).GetProperty(p.Name))
-            .Select(p => p?.GetValue(entity))
-            .ToArray();
-
-        var connectedEntity = Context.Find<TEntity>(keyValues);
-
-        if (connectedEntity == null)
+        if (Context.Entry(entity).State == EntityState.Detached)
         {
-            if (Context.Entry(entity).State == EntityState.Detached)
-            {
-                Context.Attach(entity);
-            }
-
-            Context.Update(entity);
+            Context.Attach(entity);
         }
-        else
-        {
-            //Context.ChangeTracker.TrackGraph(connectedEntity, p =>
-            //{
-            //    if (p.Entry.IsKeySet)
-            //    {
-            //        p.Entry.State = EntityState.Unchanged;
-            //    }
-            //});
 
-            Context.Entry(connectedEntity).CurrentValues.SetValues(entity);
-        }
+        Context.Update(entity);
     }
 
     public virtual void Delete(TKey id)
     {
         ArgumentNullException.ThrowIfNull(id);
-
         var entity = Context.Set<TEntity>().Find(id);
-
         ArgumentNullException.ThrowIfNull(entity);
-
         Context.Remove(entity);
     }
-
     public virtual async Task<IEnumerable<TEntity>> GetAll(CancellationToken token = default)
     {
         return await Context.Set<TEntity>().AsNoTracking().ToListAsync(token);
     }
-
     public virtual async Task<TEntity?> GetById(CancellationToken token = default, params TKey[] ids)
     {
         ArgumentNullException.ThrowIfNull(nameof(ids));
