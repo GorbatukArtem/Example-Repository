@@ -17,7 +17,7 @@ public abstract class RepositoryBase<TEntity, TKey> : IRepository<TEntity, TKey>
     {
         ArgumentNullException.ThrowIfNull(entity);
 
-        Context.Set<TEntity>().Add(entity);
+        Context.Add(entity);
 
         return entity;
     }
@@ -27,32 +27,29 @@ public abstract class RepositoryBase<TEntity, TKey> : IRepository<TEntity, TKey>
         ArgumentNullException.ThrowIfNull(entity);
 
         if (Context.Entry(entity).State == EntityState.Detached)
-            Context.Set<TEntity>().Attach(entity);
+        {
+            Context.Attach(entity);
+        }
 
-        Context.Set<TEntity>().Update(entity);
+        Context.Update(entity);
     }
 
     public virtual void Delete(TKey id)
     {
         ArgumentNullException.ThrowIfNull(id);
-
         var entity = Context.Set<TEntity>().Find(id);
-
         ArgumentNullException.ThrowIfNull(entity);
-
-        Context.Set<TEntity>().Remove(entity);
+        Context.Remove(entity);
     }
-
     public virtual async Task<IEnumerable<TEntity>> GetAll(CancellationToken token = default)
     {
         return await Context.Set<TEntity>().AsNoTracking().ToListAsync(token);
     }
-
     public virtual async Task<TEntity?> GetById(CancellationToken token = default, params TKey[] ids)
     {
         ArgumentNullException.ThrowIfNull(nameof(ids));
 
-        return await Context.Set<TEntity>().FindAsync(new object?[] { ids }, token);
+        return await Context.FindAsync<TEntity>(new object?[] { ids }, token);
     }
 
     /// <summary>
@@ -62,7 +59,7 @@ public abstract class RepositoryBase<TEntity, TKey> : IRepository<TEntity, TKey>
     /// </summary>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<int> SaveChangesAsync(CancellationToken token = default)
+    public virtual Task<int> SaveChangesAsync(CancellationToken token = default)
     {
         return Context.SaveChangesAsync(token);
     }
