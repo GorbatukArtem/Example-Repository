@@ -17,7 +17,7 @@ public abstract class RepositoryBase<TEntity, TKey> : IRepository<TEntity, TKey>
     {
         ArgumentNullException.ThrowIfNull(entity);
 
-        Context.Set<TEntity>().Add(entity);
+        Context.Add(entity);
 
         return entity;
     }
@@ -26,10 +26,39 @@ public abstract class RepositoryBase<TEntity, TKey> : IRepository<TEntity, TKey>
     {
         ArgumentNullException.ThrowIfNull(entity);
 
-        if (Context.Entry(entity).State == EntityState.Detached)
-            Context.Set<TEntity>().Attach(entity);
+        // solution related to disconnected id
 
-        Context.Set<TEntity>().Update(entity);
+        var keyValues = Context.Model
+            .FindEntityType(typeof(TEntity))?
+            .FindPrimaryKey()?
+            .Properties
+            .Select(p => typeof(TEntity).GetProperty(p.Name))
+            .Select(p => p?.GetValue(entity))
+            .ToArray();
+
+        var connectedEntity = Context.Find<TEntity>(keyValues);
+
+        if (connectedEntity == null)
+        {
+            if (Context.Entry(entity).State == EntityState.Detached)
+            {
+                Context.Attach(entity);
+            }
+
+            Context.Update(entity);
+        }
+        else
+        {
+            //Context.ChangeTracker.TrackGraph(connectedEntity, p =>
+            //{
+            //    if (p.Entry.IsKeySet)
+            //    {
+            //        p.Entry.State = EntityState.Unchanged;
+            //    }
+            //});
+
+            Context.Entry(connectedEntity).CurrentValues.SetValues(entity);
+        }
     }
 
     public virtual void Delete(TKey id)
@@ -40,7 +69,7 @@ public abstract class RepositoryBase<TEntity, TKey> : IRepository<TEntity, TKey>
 
         ArgumentNullException.ThrowIfNull(entity);
 
-        Context.Set<TEntity>().Remove(entity);
+        Context.Remove(entity);
     }
 
     public virtual async Task<IEnumerable<TEntity>> GetAll(CancellationToken token = default)
@@ -52,7 +81,7 @@ public abstract class RepositoryBase<TEntity, TKey> : IRepository<TEntity, TKey>
     {
         ArgumentNullException.ThrowIfNull(nameof(ids));
 
-        return await Context.Set<TEntity>().FindAsync(new object?[] { ids }, token);
+        return await Context.FindAsync<TEntity>(new object?[] { ids }, token);
     }
 
     /// <summary>
@@ -62,7 +91,7 @@ public abstract class RepositoryBase<TEntity, TKey> : IRepository<TEntity, TKey>
     /// </summary>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<int> SaveChangesAsync(CancellationToken token = default)
+    public virtual Task<int> SaveChangesAsync(CancellationToken token = default)
     {
         return Context.SaveChangesAsync(token);
     }

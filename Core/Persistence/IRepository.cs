@@ -1,6 +1,6 @@
 ﻿namespace Core.Persistence;
 
-public interface IRepository<TEntity, in TKey> where TEntity : class
+public interface IRepository<TEntity,in TKey> where TEntity : class
 {
     TEntity Create(TEntity entity);
     void Update(TEntity entity);

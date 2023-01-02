@@ -38,7 +38,7 @@ public class ServicePerson : IServicePerson
 
         var entity = new Person()
         {
-            Id= model.Id,
+            Id = model.Id,
             FirstName = model.FirstName,
             LastName = model.LastName,
             MiddleName = model.MiddleName,
@@ -51,7 +51,7 @@ public class ServicePerson : IServicePerson
         await repositoryPerson.SaveChangesAsync(token);
     }
 
-    public async Task Delete(int? id, CancellationToken token = default)
+    public async Task Delete(int id, CancellationToken token = default)
     {
         ArgumentNullException.ThrowIfNull(id);
 

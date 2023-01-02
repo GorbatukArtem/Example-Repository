@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Ef.Repositories.Api;
 
-public class RepositoryPerson : RepositoryBase<Person, int?>, IRepositoryPerson
+public class RepositoryPerson : RepositoryBase<Person, int>, IRepositoryPerson
 {
     public RepositoryPerson(DbContextPersonalCard context) : base(context) { }
 
